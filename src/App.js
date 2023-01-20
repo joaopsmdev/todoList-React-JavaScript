@@ -1,25 +1,43 @@
-import logo from './logo.svg';
+import { useState, React } from 'react';
 import './App.css';
+import NewTodo from './components/NewTodo';
+import TodoList from './components/TodoList';
 
-function App() {
+const App = () => {
+
+  const id = new Date().getTime()
+  const [todos, setTodos] = useState([])
+
+  const onNewTodo = (value) => {
+    setTodos([...todos, {
+      id: id,
+      title: value,
+      checked: false
+    }])
+  }
+
+  const onDelete = (todo) => {
+    setTodos(todos.filter((obj) => obj.id !== todo.id))
+  }
+
+  const onToggle = (todo) => {
+    setTodos(todos.map((obj) =>
+      obj.id === todo.id ? { ...obj, checked: !todo.checked } : obj
+    ))
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <section id='App' className='container'>
+      <header>
+        <h1 className='title'>TodoList</h1>
       </header>
-    </div>
+      <section className='main'>
+        <NewTodo
+          onNewTodo={onNewTodo} />
+        <TodoList todos={todos} onDelete={onDelete} onToggle={onToggle} />
+      </section>
+    </section>
   );
 }
-
 export default App;
